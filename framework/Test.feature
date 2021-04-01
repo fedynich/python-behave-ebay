@@ -16,11 +16,11 @@ Feature: Ebay Search
     Examples: Shoes
       | search_item    | filter_name    | filter_value  |
       | shoes          | Brand          | Nike          |
-      | shoes          | Condition      | New           |
 
-#    Examples: Dress
-#      | search_item    | filter_name    | filter_value  |
-#      | dress          | Dress Length   | Midi          |
+    Examples: Dress
+      | search_item    | filter_name    | filter_value  |
+      | dress          | Brand          | Zara          |
+      | dress          | Dress Length   | Midi          |
 
   Scenario: Verify that search displays related results by clicking Search button
     When  Search for "dress"
