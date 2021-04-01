@@ -76,7 +76,7 @@ def filter_verification(context):
         actual_spec = _get_actual_spec(_get_spec_keys(context))
 
         for k, v in expected_spec.items():
-            if v not in actual_spec[k]:
+            if v.lower() not in actual_spec[k].lower():
                 mismatches.append(title)
                 break
 

@@ -1,26 +1,40 @@
 Feature: Ebay Search
 
 
-  Scenario Outline: Verify that all results are related to search word
+  Scenario Outline: Verify that Shoes and Dress results are related to search word
     Given Open eBay.com
     And   Search for "<search_item>"
     And   Click on Search button
-    Then  Apply following filters
-      | Filter         | value          |
-      | <filter_name>  | <filter_value> |
+    And   Apply following filters
+      | Filter           | value            |
+      | <filter_name_1>  | <filter_value_1> |
+      | <filter_name_2>  | <filter_value_2> |
 
     Then  Custom filter results verification
       | Filter         | value          |
-      | <filter_name>  | <filter_value> |
-
-    Examples: Shoes
-      | search_item    | filter_name    | filter_value  |
-      | shoes          | Brand          | Nike          |
+      | <filter_name_1>  | <filter_value_1> |
+      | <filter_name_2>  | <filter_value_2> |
 
     Examples: Dress
-      | search_item    | filter_name    | filter_value  |
-      | dress          | Brand          | Zara          |
-      | dress          | Dress Length   | Midi          |
+      | search_item    | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
+      | dress          | Brand            | Zara            | Dress Length     | Midi            |
+
+#    Examples: Dress
+#      | search_item    | filter_name    | filter_value  |
+#      | dress          | Brand          | Zara          |
+#      | dress          | Dress Length   | Midi          |
+
+#  Scenario Outline: Verify that Shirt results are related to search word
+#    Given Open eBay.com
+#    And   Search for "<search_item>"
+#    And   Click on Search button
+#    And    Apply following filters
+#      | Filter         | value          |
+#      | <filter_name>  | <filter_value> |
+#    Then  Custom filter results verification
+#      | Filter         | value          |
+#      | <filter_name>  | <filter_value> |
+
 
   Scenario: Verify that search displays related results by clicking Search button
     When  Search for "dress"
