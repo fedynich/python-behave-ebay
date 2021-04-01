@@ -51,7 +51,7 @@ Feature: Ebay Search
     When  Search for text
    """11 Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse
    ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse
-   integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non
+   integer praesent vel, integer gravida mauris, fringilla vehicula lacinia none
    """
     Then  Search field accepts text
    """Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse
@@ -101,7 +101,7 @@ Feature: Ebay Search
   Scenario: Verify that autocomplete results are auto-fixed on misspelled search
     When Search for "druss"
     And  Autocomplete menu displayed
-    Then Autocomplete menu shows "dress" related results is in every row
+    Then Autocomplete menu displays "dress"
 
   Scenario: Verify that autocomplete menu displays last search results in bold font
     When Search for "dress"
