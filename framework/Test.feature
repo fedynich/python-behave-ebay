@@ -53,7 +53,7 @@ Feature: Ebay Search
    ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse
    integer praesent vel, integer gravida mauris, fringilla vehicula lacinia none
    """
-    Then  Search field accepts text
+    Then  Search fiel accepts text
    """Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse
    ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse
    integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non

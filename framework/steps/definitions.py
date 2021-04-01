@@ -103,7 +103,9 @@ def _get_suspicious_items(items, expected_labels):
 
 
 def _get_item_link_and_title(context):
-    items = context.browser.find_elements_by_xpath("//li[@class = 's-item      ']")
+    # take items only in search results, as items from "Recently viewed items" can be counted
+    items = context.browser.find_elements_by_xpath("//li[starts-with(@class, 's-item      ')]"
+                                                   "[parent::ul[contains(@class, 'srp-results')]]")
 
     pairs = []
     for item in items:
@@ -111,3 +113,6 @@ def _get_item_link_and_title(context):
                       item.find_element_by_xpath("descendant::a").get_attribute("href")))
 
     return pairs
+
+
+
