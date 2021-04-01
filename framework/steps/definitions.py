@@ -41,14 +41,24 @@ def apply_filter_multiple(context):
 
 
 def apply_filter(context, header, label):
-    target_checkbox = context.browser \
+    expand_filter(context, header)
+    checkbox = context.browser \
         .find_elements_by_xpath(f"//li[@class='x-refine__main__list '][.//h3[text()='{header}']]"
                                 f"//div[@class='x-refine__select__svg'][.//span[text()='{label}']]"
                                 f"//input")
-    if not target_checkbox:
+    if not checkbox:
         raise ValueError(f'No filter by label {label} in category {header}')
 
-    target_checkbox[0].click()
+    checkbox[0].click()
+
+
+def expand_filter(context, header):
+    isCollapsed = context \
+        .browser.find_elements_by_xpath(f"//li[@class='x-refine__main__list '][.//h3[text()='{header}']]"
+                                        f"//parent::div[@aria-expanded='false']")
+
+    if isCollapsed:
+        isCollapsed[0].click()
 
 
 @step("Custom filter results verification")
@@ -66,7 +76,7 @@ def filter_verification(context):
         actual_spec = _get_actual_spec(_get_spec_keys(context))
 
         for k, v in expected_spec.items():
-            if actual_spec[k] != v:
+            if v not in actual_spec[k]:
                 mismatches.append(title)
                 break
 
@@ -75,7 +85,8 @@ def filter_verification(context):
 
     if mismatches:
         raise ValueError(
-            f"Following items do not satisfy filter criteria Brand: Nike\n {mismatches}")
+            f"Following items do not satisfy filter criteria "
+            f"{expected_spec.keys()}: {expected_spec.values()}\n {[mismatch for mismatch in mismatches]}")
 
 
 def _get_spec_keys(context):
@@ -103,7 +114,7 @@ def _get_suspicious_items(items, expected_labels):
 
 
 def _get_item_link_and_title(context):
-    # take items only in search results, as items from "Recently viewed items" can be counted
+    """Take items only in search results, as items from "Recently viewed items" can be counted"""
     items = context.browser.find_elements_by_xpath("//li[starts-with(@class, 's-item      ')]"
                                                    "[parent::ul[contains(@class, 'srp-results')]]")
 
@@ -113,6 +124,3 @@ def _get_item_link_and_title(context):
                       item.find_element_by_xpath("descendant::a").get_attribute("href")))
 
     return pairs
-
-
-
