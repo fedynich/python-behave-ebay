@@ -1,5 +1,5 @@
 Feature: Hello world
-  
+
   Scenario Outline: Verify that all results are related to search word
     Given Open eBay.com
     And   Search for "<search_item>"
@@ -47,8 +47,16 @@ Feature: Hello world
     Then  All items are somewhat dress related
 
   Scenario: Verify max length of search field
-    When  Search for "11 Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non"
-    Then  Search field accepts "Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non"
+    When  Search for text
+   """11 Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse
+   ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse
+   integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non
+   """
+    Then  Search field accepts text
+   """Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse
+   ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse
+   integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non
+   """
 
   Scenario: Verify that search is not case sensitive
 
