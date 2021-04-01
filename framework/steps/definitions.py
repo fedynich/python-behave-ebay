@@ -63,17 +63,17 @@ def expand_filter(context, header):
 
 @step("Custom filter results verification")
 def filter_verification(context):
-    original_page = context.browser.current_window_handle
     expected_spec = _get_expected_spec(context)
-    suspicious_items = _get_suspicious_items(_get_item_link_and_title(context), expected_spec.values())
+    suspicious_items = _get_suspicious_items(context, expected_spec.values())
 
     mismatches = []
+    original_page = context.browser.current_window_handle
 
     for title, link in suspicious_items:
         context.browser.execute_script(f'window.open("{link}", "_blank");')
         context.browser.switch_to.window(context.browser.window_handles[-1])
 
-        actual_spec = _get_actual_spec(_get_spec_keys(context))
+        actual_spec = _get_actual_spec(_get_actual_spec_keys(context))
 
         for k, v in expected_spec.items():
             if v.lower() not in actual_spec[k].lower():
@@ -89,7 +89,7 @@ def filter_verification(context):
             f"{expected_spec.keys()}: {expected_spec.values()}\n {[mismatch for mismatch in mismatches]}")
 
 
-def _get_spec_keys(context):
+def _get_actual_spec_keys(context):
     return context.browser.find_elements_by_xpath("//div[@class='itemAttr']//td[@class='attrLabels']")
 
 
@@ -101,7 +101,9 @@ def _get_expected_spec(context):
     return {row['Filter']: row['value'] for row in context.table.rows}
 
 
-def _get_suspicious_items(items, expected_labels):
+def _get_suspicious_items(context, expected_labels):
+    items = _get_items_data(context)
+
     list_items = []
 
     for title, link in items:
@@ -113,7 +115,7 @@ def _get_suspicious_items(items, expected_labels):
     return list_items
 
 
-def _get_item_link_and_title(context):
+def _get_items_data(context):
     """Take items only in search results, as items from "Recently viewed items" can be counted"""
     items = context.browser.find_elements_by_xpath("//li[starts-with(@class, 's-item      ')]"
                                                    "[parent::ul[contains(@class, 'srp-results')]]")
