@@ -1,4 +1,5 @@
-Feature: Hello world
+Feature: Ebay Search
+
 
   Scenario Outline: Verify that all results are related to search word
     Given Open eBay.com
