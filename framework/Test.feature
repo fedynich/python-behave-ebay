@@ -1,7 +1,7 @@
 Feature: Ebay Search
 
 
-  Scenario Outline: Verify that Shoes and Dress results are related to search word
+  Scenario Outline: Verify that Shoes and Dress search filtered correctly
     Given Open eBay.com
     And   Search for "<search_item>"
     And   Click on Search button
@@ -19,10 +19,10 @@ Feature: Ebay Search
       | search_item    | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
       | dress          | Brand            | Zara            | Dress Length     | Midi            |
 
-#    Examples: Dress
-#      | search_item    | filter_name    | filter_value  |
-#      | dress          | Brand          | Zara          |
-#      | dress          | Dress Length   | Midi          |
+    Examples: Shoes
+      | search_item    | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
+      | shoes          | Brand            | Nike            | Features         | Waterfroof      |
+
 
 #  Scenario Outline: Verify that Shirt results are related to search word
 #    Given Open eBay.com

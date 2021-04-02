@@ -28,7 +28,7 @@ def click_search_button(context):
 
 @step('Filter by "{label}" in category "{header}"')
 def apply_filter_single(context, header, label):
-    apply_filter(context, header, label)
+    _apply_filter(context, header, label)
 
 
 @step('Apply following filters')
@@ -37,11 +37,11 @@ def apply_filter_multiple(context):
         header = filter['Filter']
         label_checkbox = filter['value']
 
-        apply_filter(context, header, label_checkbox)
+        _apply_filter(context, header, label_checkbox)
 
 
-def apply_filter(context, header, label):
-    expand_filter(context, header)
+def _apply_filter(context, header, label):
+    _expand_filter(context, header)
     checkbox = context.browser \
         .find_elements_by_xpath(f"//li[@class='x-refine__main__list '][.//h3[text()='{header}']]"
                                 f"//div[@class='x-refine__select__svg'][.//span[text()='{label}']]"
@@ -52,7 +52,7 @@ def apply_filter(context, header, label):
     checkbox[0].click()
 
 
-def expand_filter(context, header):
+def _expand_filter(context, header):
     isCollapsed = context \
         .browser.find_elements_by_xpath(f"//li[@class='x-refine__main__list '][.//h3[text()='{header}']]"
                                         f"//parent::div[@aria-expanded='false']")
@@ -73,7 +73,7 @@ def filter_verification(context):
         context.browser.execute_script(f'window.open("{link}", "_blank");')
         context.browser.switch_to.window(context.browser.window_handles[-1])
 
-        actual_spec = _get_actual_spec(_get_actual_spec_keys(context))
+        actual_spec = _get_actual_spec(context)
 
         for k, v in expected_spec.items():
             if v.lower() not in actual_spec[k].lower():
@@ -86,14 +86,12 @@ def filter_verification(context):
     if mismatches:
         raise ValueError(
             f"Following items do not satisfy filter criteria "
-            f"{expected_spec.keys()}: {expected_spec.values()}\n {[mismatch for mismatch in mismatches]}")
+            f"{expected_spec.keys()}: {expected_spec.values()}\n {mismatches}")
 
 
-def _get_actual_spec_keys(context):
-    return context.browser.find_elements_by_xpath("//div[@class='itemAttr']//td[@class='attrLabels']")
+def _get_actual_spec(context):
+    keys = context.browser.find_elements_by_xpath("//div[@class='itemAttr']//td[@class='attrLabels']")
 
-
-def _get_actual_spec(keys):
     return {key.text.strip(":"): key.find_element_by_xpath("following-sibling::td[.//*[text()]]").text for key in keys}
 
 
