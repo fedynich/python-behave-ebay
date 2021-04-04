@@ -3,6 +3,8 @@ Feature: Ebay Search
   Background: Open URL
     When  Open eBay.com
 
+  # --- Search related ---
+
   Scenario: Verify that search displays related results by clicking Search button
     When  Search for "dress"
     And   Click on Search button
@@ -55,7 +57,8 @@ Feature: Ebay Search
     And   Click on Search button
     Then  No results error message displayed
 
-   # Autocomplete menu
+  # --- Search - Autocomplete menu ---
+
   Scenario: Verify that autocomplete menu contains search word in each row
   Scenario: Verify that it is able to search from autocomplete menu using click
   Scenario: Verify that it is able to search from autocomplete menu using keyboard
@@ -64,44 +67,22 @@ Feature: Ebay Search
   Scenario: Verify that autocomplete results are auto-fixed on misspelled search
   Scenario: Verify that autocomplete menu displays last search results in bold font
 
+  # --- Header Navigation ---
 
-  # Top Nav Menu
-  Scenario: Verify it is able to navigate to Sign In page
-    When Click on Sign In link
-    Then Redirected to "Sign In" page
+  Scenario Outline: Verify it is able to navigate from Header menu
+    When Click on "<link_name>" link on the header navigation
+    Then Redirected to "<title>" page
 
-  Scenario: Verify it is able to navigate to Daily Deals page
-    When Click on "Daily Deals" link on the top nav menu
-    Then Redirected to "Daily Deals" page
-
-  Scenario: Verify it is able to navigate to Brand Outlet page
-    When Click on "Brand Outlet" link on the top nav menu
-    Then Redirected to "Brand Outlet" page
-
-  Scenario: Verify it is able to navigate to Help & Contact page
-    When Click on "Help & Contact" link on the top nav menu
-    Then Redirected to "Customer Service" page
-
-  Scenario: Verify it is able to navigate to Sell page
-    When Click on "Sell" link on the top nav menu
-    Then Redirected to "Sell" page
-
-  Scenario: Verify it is able to navigate to Watchlist page
-    When Click on Watchlist link on the top nav menu
-#    Then Stayed at the same page
-
-  Scenario: Verify it is able to navigate to Sign In page on clicking on My Ebay link
-    When Click on My Ebay link on the top nav menu
-    Then Redirected to "Sign In" page
-
-  Scenario: Verify it is able to navigate to Alerts page
-    When Click on Alert link on the top nav menu
-#    Then Stayed at the same page
-
-  Scenario: Verify it is able to navigate to Cart page
-    When Click on Cart link on the top nav menu
-    Then Redirected to "Cart" page
-
+    Examples:
+    | link_name      | title                                    |
+    | Sell           | Sell                                     |
+    | Sign In        | Sign In                                  |
+    | My eBay        | Sign In                                  |
+    | Daily Deals    | Daily Deals                              |
+    | Brand Outlet   | Brand Outlet                             |
+    | Help & Contact | Customer Service                         |
+    | Watchlist      | Electronics, Cars, Fashion, Collectibles |
+    | Alert          | Electronics, Cars, Fashion, Collectibles |
 
   Scenario Outline: Verify that Shoes and Dress search filtered correctly
     Given Open eBay.com

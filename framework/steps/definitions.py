@@ -224,56 +224,15 @@ def _get_items_data(context):
 # --- Top navigation menu ---
 
 
-@step('Click on "{link_name}" link on the top nav menu')
-def click_link_top_nav_menu(context, link_name):
+@step('Click on "{link_name}" link on the header navigation')
+def step_impl(context, link_name):
     try:
-        context.browser.find_element_by_xpath(f"//a[@class='gh-p' and contains(text(), '{link_name}')]").click()
+        context.browser.find_element_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]").click()
     except NoSuchElementException:
-        raise ValueError(f"{link_name} link has not been found")
-
-
-@step('Click on Sign In link')
-def sign_in_click(context):
-    try:
-        context.browser.find_element_by_xpath(f"//span[@id='gh-ug']/a[text()='Sign in']").click()
-    except NoSuchElementException:
-        raise ValueError(f"Sign In link has not been found")
+        raise ValueError(f"{link_name} link does not exist")
 
 
 @step('Redirected to "{title}" page')
 def is_page(context, title):
     if title.lower() not in context.browser.title.lower():
         raise ValueError(f"The page {title} has not been found")
-
-
-@step("Click on Watchlist link on the top nav menu")
-def watchlist_click(context):
-    try:
-        context.browser.find_element_by_xpath(f"//a[contains(@class,'gh-rvi-menu') and @title='Watchlist']").click()
-    except NoSuchElementException:
-        raise ValueError(f"Watchlist link has not been found")
-
-
-@step("Click on My Ebay link on the top nav menu")
-def step_impl(context):
-    try:
-        context.browser.find_element_by_xpath(f"//a[@title='My eBay' and text()='My eBay']").click()
-    except NoSuchElementException:
-        raise ValueError(f"My Ebay page has not been found")
-
-
-@step("Click on Alert link on the top nav menu")
-def alert_bell_click(context):
-    try:
-        context.browser.find_element_by_xpath(f"//li[@id='gh-eb-Alerts']").click()
-    except NoSuchElementException:
-        raise ValueError(f"Alert link has not been found")
-
-
-@step("Click on Cart link on the top nav menu")
-def my_ebay_click(context):
-    try:
-        context.browser.find_element_by_xpath(f"//li[@id='gh-minicart-hover']").click()
-    except NoSuchElementException:
-        raise ValueError(f"Cart link has not been found")
-
