@@ -227,12 +227,14 @@ def _get_items_data(context):
 @step('Click on "{link_name}" link on the header navigation')
 def step_impl(context, link_name):
     try:
-        context.browser.find_element_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]").click()
+        context.browser\
+            .find_element_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]")\
+            .click()
     except NoSuchElementException:
         raise ValueError(f"{link_name} link does not exist")
 
 
-@step('Redirected to "{title}" page')
+@step('Observing the "{title}" page')
 def is_page(context, title):
     if title.lower() not in context.browser.title.lower():
         raise ValueError(f"The page {title} has not been found")

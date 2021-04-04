@@ -71,7 +71,7 @@ Feature: Ebay Search
 
   Scenario Outline: Verify it is able to navigate from Header menu
     When Click on "<link_name>" link on the header navigation
-    Then Redirected to "<title>" page
+    Then Observing the "<title>" page
 
     Examples:
     | link_name      | title                                    |
@@ -83,6 +83,7 @@ Feature: Ebay Search
     | Help & Contact | Customer Service                         |
     | Watchlist      | Electronics, Cars, Fashion, Collectibles |
     | Alert          | Electronics, Cars, Fashion, Collectibles |
+
 
   Scenario Outline: Verify that Shoes and Dress search filtered correctly
     Given Open eBay.com
