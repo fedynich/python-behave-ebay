@@ -29,10 +29,16 @@ Feature: Ebay Search
     And  Click on Search button
     Then  All Categories page displayed
 
-  Scenario: Verify that search displays auto-fixed results on misspelling
-    When  Search for "dryss"
+  Scenario Outline: Verify that search displays auto-fixed results on misspelling
+    When  Search for "<misspelled>"
     And   Click on Search button
     Then  All items are somewhat "dress" related
+
+    Examples: Misspelled Dress
+      | misspelled  |
+      | dryss       |
+      | dres        |
+      | dross       |
 
   Scenario: Verify max length of search field
     When  Search for text
@@ -42,24 +48,39 @@ Feature: Ebay Search
    """
     Then  Search field reach out of max length
 
-  Scenario: Verify that search is not case sensitive
-    When  Search for "DrEss"
+  Scenario Outline: Verify that search is not case sensitive
+    When  Search for "<case>"
     And   Click on Search button
     And   All items are somewhat "dress" related
+    Examples: XSS
+      | case  |
+      | Dress |
+      | DRESS |
+      | dReSS |
 
-  Scenario: Verify that search field is XSS protected
-    When  Search for "1'“()%26%25<acx><ScRiPt%20>ohKJ(9820)</ScRiPt>"
+  Scenario Outline: Verify that search field is XSS protected
+    When  Search for "<xss>"
     And   Click on Search button
-    Then  Redirected to "Access Denied" page
+    Then  Observing the "Access Denied" page
+    Examples: XSS
+    | xss                                             |
+    | 1'“()%26%25<acx><ScRiPt%20>ohKJ(9820)</ScRiPt>  |
+    | ,’“()&%<acx><ScRiPt >f9bK(9620)</ScRiPt>        |
+    | coat’“()&%<acx><ScRiPt >l27G(9644)</ScRiPt>     |
 
   Scenario: Verify that search field accepts Unicode
-    When  Search for "उനЬa#ɊЦ1"
+    When  Search for "उനЬa#ɊЦ%"
     And   Click on Search button
     Then  No results error message displayed
 
   # --- Search - Autocomplete menu ---
+  #     TO DO
 
   Scenario: Verify that autocomplete menu contains search word in each row
+    When  Dropdown call menu for "Dress" by mouse hover
+    Then  Dropdown close menu for "Dress" by mouse hover
+
+
   Scenario: Verify that it is able to search from autocomplete menu using click
   Scenario: Verify that it is able to search from autocomplete menu using keyboard
   Scenario: Verify that autocomplete menu displays last search results when search field is empty
@@ -100,5 +121,5 @@ Feature: Ebay Search
       | <filter_name_2>  | <filter_value_2> |
 
     Examples: Dress
-      | search_item    | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
-      | dress          | Brand            | Zara            | Dress Length     | Midi            |
+      | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
+      | dress            | Brand            | Zara            | Dress Length     | Midi            |

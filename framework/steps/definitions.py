@@ -1,6 +1,7 @@
 from behave import step
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -228,8 +229,7 @@ def _get_items_data(context):
 def step_impl(context, link_name):
     try:
         context.browser\
-            .find_element_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]")\
-            .click()
+            .find_elements_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]")
     except NoSuchElementException:
         raise ValueError(f"{link_name} link does not exist")
 
