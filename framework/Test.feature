@@ -1,9 +1,8 @@
 Feature: Ebay Search
 
+  # --- Search related ---
   Background: Open URL
     When  Open eBay.com
-
-  # --- Search related ---
 
   Scenario: Verify that search displays related results by clicking Search button
     When  Search for "dress"
@@ -105,9 +104,16 @@ Feature: Ebay Search
     | Watchlist      | Electronics, Cars, Fashion, Collectibles |
     | Alert          | Electronics, Cars, Fashion, Collectibles |
 
+  Scenario: Verify that Shoes and Dress search filtered correctly
+    Given Open eBay.com
+    And   Search for "dress"
+    And   Click on Search button
+    And   Apply following filters
+      | Filter           | value |
+      | Brand            | Zara  |
+      | Dress Length     | Midi  |
 
   Scenario Outline: Verify that Shoes and Dress search filtered correctly
-    Given Open eBay.com
     And   Search for "<search_item>"
     And   Click on Search button
     And   Apply following filters
@@ -123,3 +129,7 @@ Feature: Ebay Search
     Examples: Dress
       | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
       | dress            | Brand            | Zara            | Dress Length     | Midi            |
+
+    Examples: Shoes
+      | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
+      | shoes            | Brand            | Nike            | Upper Material   | Leather         |

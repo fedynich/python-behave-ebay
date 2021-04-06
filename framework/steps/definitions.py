@@ -8,15 +8,17 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-@step("Open eBay.com")
-def open_url(context):
-    context.browser = webdriver.Chrome()
-    context.browser.get("https://www.ebay.com/")
+@step('Open eBay.com')
+def some_test_impl(context):
+    context.browser.get(context.url)
 
 
 @step('Search for "{text}"')
 def search_text(context, text):
-    get_search_field(context).send_keys(text)
+    WebDriverWait(context.browser, 5) \
+        .until(EC.presence_of_element_located((By.XPATH, "//input[@id='gh-ac']")),
+               message='Search bar was not located').\
+        send_keys(f"{text}")
 
 
 @step("Search for text")
@@ -26,7 +28,10 @@ def search_text(context):
 
 @step("Click on Search button")
 def click_search_button(context):
-    get_search_button(context).click()
+    WebDriverWait(context.browser, 5) \
+        .until(EC.presence_of_element_located((By.XPATH, "//input[@id='gh-btn']")),
+               message='Search button was not found') \
+        .click()
 
 
 @step("Press Return/Enter key for Search button")
@@ -83,29 +88,6 @@ def no_results_error(context):
     except NoSuchElementException:
         raise ValueError("\"No exact matches found\" error message has not been displayed ")
 
-# --- Home Work 9 ---
-
-#
-# @step("Open eBay.com")
-# def open_url(context):
-#     context.browser.get(context.url)
-#
-
-# @step('Search for "{text}"')
-# def search_text(context, text):
-#     WebDriverWait(context.browser, 5) \
-#         .until(EC.presence_of_element_located((By.XPATH, "//input[@id='gh-ac']")),
-#                message='Search bar was not located') \
-#         .send_keys(f"{text}")
-#
-#
-# @step("Click on Search button")
-# def click_search_button(context):
-#     WebDriverWait(context.browser, 5) \
-#         .until(EC.presence_of_element_located((By.XPATH, "//input[@id='gh-btn']")),
-#                message='Search button was not found') \
-#         .click()
-
 
 @step('Filter by "{label}" in category "{header}"')
 def apply_filter_single(context, header, label):
@@ -114,9 +96,9 @@ def apply_filter_single(context, header, label):
 
 @step('Apply following filters')
 def apply_filter_multiple(context):
-    for filter in context.table.rows:
-        header = filter['Filter']
-        label_checkbox = filter['value']
+    for row in context.table.rows:
+        header = row['Filter']
+        label_checkbox = row['value']
 
         _apply_filter(context, header, label_checkbox)
 
@@ -142,23 +124,9 @@ def _expand_filter(context, header):
         isCollapsed[0].click()
 
 
-def _validate_filters_setup(context, expected_spec):
-    for header, label in expected_spec.items():
-        isSelected = context.browser \
-            .find_elements_by_xpath(f"//li[@class='x-refine__main__list '][.//h3[text()='{header}']]"
-                                    f"//div[@class='x-refine__select__svg'][.//span[text()='{label}']]"
-                                    f"//input")[0].is_selected()
-
-        if not isSelected:
-            raise ValueError(
-                f"Filter specification doesn't match to applied results: \n"
-                f"Filter specification - Filter: {header} | value: {label} \n")
-
-
 @step("Custom filter results verification")
 def filter_verification(context):
     expected_spec = _get_expected_spec(context)
-    _validate_filters_setup(context, expected_spec)
     suspicious_items = _get_suspicious_items(context, expected_spec.values())
 
     mismatches = []
@@ -222,11 +190,12 @@ def _get_items_data(context):
 
     return pairs
 
+
 # --- Top navigation menu ---
 
 
 @step('Click on "{link_name}" link on the header navigation')
-def step_impl(context, link_name):
+def click_header_link(context, link_name):
     try:
         context.browser\
             .find_elements_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]")
