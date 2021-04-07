@@ -110,6 +110,7 @@ Feature: Ebay Search
       | Filter           | value |
       | Brand            | Zara  |
       | Dress Length     | Midi  |
+    Then  Filter results verification
 
   Scenario Outline: Verify that Shoes and Dress search filtered correctly
     And   Search for "<search_item>"
