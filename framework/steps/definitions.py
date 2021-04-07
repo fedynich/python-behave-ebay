@@ -173,7 +173,7 @@ def _get_suspicious_items(context, expected_labels):
 
 def _get_items_data(context):
     """Take items only in search results, as items from "Recently viewed items" can be counted"""
-    items = context.browser.find_elements_by_xpath("//li[starts-with(@class, 's-item      ')]"
+    items = context.browser.find_elements_by_xpath("//li[starts-with(@class, 's-item')]"
                                                    "[parent::ul[contains(@class, 'srp-results')]]")
 
     pairs = []
@@ -224,10 +224,10 @@ def all_autocomplete_contain_search(context, search):
 
 # --- Helpers ---
 
+
 def get_search_field(context):
     return context.browser.find_element_by_xpath("//input[@id='gh-ac']")
 
 
 def get_search_button(context):
     return context.browser.find_element_by_xpath("//input[@id='gh-btn']")
-

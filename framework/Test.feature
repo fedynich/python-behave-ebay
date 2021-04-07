@@ -75,10 +75,14 @@ Feature: Ebay Search
   # --- Search: Autocomplete menu ---
 
   Scenario: Verify that autocomplete search menu contains search word in each row
-    And  Search for "dress"
-    Then All items are in autocomplete search somewhat "dress" related
-    
+    When  Search for "dress"
+    Then  All items are in autocomplete search somewhat "dress" related
+
   Scenario: Verify that it is able to search from autocomplete menu using click
+    When  Search for "dress"
+    And   Click on search item from autocomplete menu
+    Then  All items are somewhat "dress" related
+
   Scenario: Verify that it is able to search from autocomplete menu using keyboard
   Scenario: Verify that autocomplete menu displays last search results when search field is empty
   Scenario: Verify that autocomplete menu displays last search results when search field contains last search
