@@ -56,8 +56,7 @@ def max_length_search(context):
 
 @step('All items are somewhat "{search}" related')
 def all_items_contain_search(context, search):
-    search_items = context.browser.find_elements_by_xpath(f"//li[starts-with(@class, 's-item      ')]"
-                                                          "[parent::ul[contains(@class, 'srp-results')]]")
+    search_items = _get_search_result_items(context)
 
     for item in search_items:
         if search.lower() not in item.text.lower():
@@ -174,8 +173,7 @@ def _get_suspicious_items(context, expected_labels):
 
 def _get_items_data(context):
     """Take items only in search results, as items from "Recently viewed items" can be counted"""
-    items = context.browser.find_elements_by_xpath("//li[starts-with(@class, 's-item')]"
-                                                   "[parent::ul[contains(@class, 'srp-results')]]")
+    items = _get_search_result_items(context)
 
     pairs = []
     for item in items:
@@ -232,7 +230,7 @@ def step_impl(context):
         .find_elements_by_xpath("//ul[@id='ui-id-1']//li[@class='ui-menu-item ghAC_visible'][1]")
 
     if not target_element:
-        raise ValueError(f"First result in autocomplete menu does not contain search")
+        raise ValueError("First result in autocomplete menu does not contain search")
 
     ActionChains(context.browser) \
         .move_to_element(target_element) \
@@ -244,8 +242,30 @@ def step_impl(context):
 
 
 def get_search_field(context):
-    return context.browser.find_element_by_xpath("//input[@id='gh-ac']")
+    items = context.browser.find_elements_by_xpath("//input[@id='gh-ac']")
+
+    if not items:
+        raise ValueError("Search button does not exist")
+
+    return items[0]
 
 
 def get_search_button(context):
-    return context.browser.find_element_by_xpath("//input[@id='gh-btn']")
+    items = context.browser.find_elements_by_xpath("//input[@id='gh-btn']")
+
+    if not items:
+        raise ValueError("Search button does not exist")
+
+    return items[0]
+
+
+def _get_search_result_items(context):
+    items = context.browser.find_elements_by_xpath(f"//li[starts-with(@class, 's-item')]"
+                                                   "[ancestor::ul[contains(@class, 'srp-results')]]")
+
+    if not items:
+        raise ValueError("Result items not exist")
+
+    return items
+
+
