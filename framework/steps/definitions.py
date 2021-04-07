@@ -1,11 +1,11 @@
 from behave import step
-from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time
 
 
 @step('Open eBay.com')
@@ -37,15 +37,6 @@ def click_search_button(context):
 @step("Press Return/Enter key for Search button")
 def press_enter_for_search_button(context):
     get_search_button(context).send_keys(Keys.ENTER)
-
-
-# --- Helpers ---
-def get_search_field(context):
-    return context.browser.find_element_by_xpath("//input[@id='gh-ac']")
-
-
-def get_search_button(context):
-    return context.browser.find_element_by_xpath("//input[@id='gh-btn']")
 
 # ---- Assertions ---
 
@@ -126,7 +117,7 @@ def _expand_filter(context, header):
         isCollapsed[0].click()
 
 
-@step("Custom filter results verification")
+@step("Filter results verification")
 def filter_verification(context):
     expected_spec = _get_expected_spec(context)
     suspicious_items = _get_suspicious_items(context, expected_spec.values())
@@ -209,3 +200,34 @@ def click_header_link(context, link_name):
 def is_page(context, title):
     if title.lower() not in context.browser.title.lower():
         raise ValueError(f"The page {title} has not been found")
+
+
+# --- Autocomplete search menu  ---
+
+
+def wait_autocomplete_flyout(context):
+    WebDriverWait(context.browser, 20) \
+        .until(EC.visibility_of_element_located((By.XPATH, "//li[contains(@class, 'ui-menu-item')]")),
+           message='Autocomplete search menu is not displayed')
+
+
+@step('All items are in autocomplete search somewhat "{search}" related')
+def all_autocomplete_contain_search(context, search):
+    wait_autocomplete_flyout(context)
+
+    menu_items = context.browser.find_elements_by_xpath("//ul[@id='ui-id-1']//li[@class='ui-menu-item ghAC_visible']")
+
+    for item in menu_items:
+        if search.lower() not in item.text.lower():
+            raise ValueError(f"Search word {search} is not present in \"{item.text}\" option autocomplete menu")
+
+
+# --- Helpers ---
+
+def get_search_field(context):
+    return context.browser.find_element_by_xpath("//input[@id='gh-ac']")
+
+
+def get_search_button(context):
+    return context.browser.find_element_by_xpath("//input[@id='gh-btn']")
+

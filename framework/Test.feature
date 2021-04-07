@@ -72,14 +72,12 @@ Feature: Ebay Search
     And   Click on Search button
     Then  No results error message displayed
 
-  # --- Search - Autocomplete menu ---
-  #     TO DO
+  # --- Search: Autocomplete menu ---
 
-  Scenario: Verify that autocomplete menu contains search word in each row
-    When  Dropdown call menu for "Dress" by mouse hover
-    Then  Dropdown close menu for "Dress" by mouse hover
-
-
+  Scenario: Verify that autocomplete search menu contains search word in each row
+    And  Search for "dress"
+    Then All items are in autocomplete search somewhat "dress" related
+    
   Scenario: Verify that it is able to search from autocomplete menu using click
   Scenario: Verify that it is able to search from autocomplete menu using keyboard
   Scenario: Verify that autocomplete menu displays last search results when search field is empty
@@ -120,13 +118,12 @@ Feature: Ebay Search
       | Filter           | value            |
       | <filter_name_1>  | <filter_value_1> |
       | <filter_name_2>  | <filter_value_2> |
-
-    Then  Custom filter results verification
+    Then  Filter results verification
 
     Examples: Dress
       | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
       | dress            | Brand            | Zara            | Dress Length     | Midi            |
 
-#    Examples: Shoes
-#      | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
-#      | shoes            | Brand            | Nike            | Upper Material   | Leather         |
+    Examples: Shoes
+      | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
+      | shoes            | Brand            | Nike            | Upper Material   | Leather         |
