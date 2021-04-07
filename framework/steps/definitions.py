@@ -96,7 +96,9 @@ def apply_filter_single(context, header, label):
 
 @step('Apply following filters')
 def apply_filter_multiple(context):
-    for row in context.table.rows:
+    context.shared_table = context.table
+
+    for row in context.shared_table.rows:
         header = row['Filter']
         label_checkbox = row['value']
 
@@ -159,9 +161,9 @@ def _get_actual_spec(context):
 
 
 def _get_expected_spec(context):
-    headings = context.table.headings
+    headings = context.shared_table.headings
 
-    return {row[headings[0]]: row[headings[1]] for row in context.table.rows}
+    return {row[headings[0]]: row[headings[1]] for row in context.shared_table.rows}
 
 
 def _get_suspicious_items(context, expected_labels):

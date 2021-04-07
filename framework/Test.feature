@@ -122,14 +122,11 @@ Feature: Ebay Search
       | <filter_name_2>  | <filter_value_2> |
 
     Then  Custom filter results verification
-      | Filter           | value            |
-      | <filter_name_1>  | <filter_value_1> |
-      | <filter_name_2>  | <filter_value_2> |
 
     Examples: Dress
       | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
       | dress            | Brand            | Zara            | Dress Length     | Midi            |
 
-    Examples: Shoes
-      | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
-      | shoes            | Brand            | Nike            | Upper Material   | Leather         |
+#    Examples: Shoes
+#      | search_item      | filter_name_1    | filter_value_1  | filter_name_2    | filter_value_2  |
+#      | shoes            | Brand            | Nike            | Upper Material   | Leather         |
