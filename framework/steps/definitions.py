@@ -17,7 +17,7 @@ def some_test_impl(context):
 def search_text(context, text):
     WebDriverWait(context.browser, 5) \
         .until(EC.presence_of_element_located((By.XPATH, "//input[@id='gh-ac']")),
-               message='Search bar was not located').\
+               message='Search bar was not located'). \
         send_keys(f"{text}")
 
 
@@ -37,6 +37,7 @@ def click_search_button(context):
 @step("Press Return/Enter key for Search button")
 def press_enter_for_search_button(context):
     get_search_button(context).send_keys(Keys.ENTER)
+
 
 # ---- Assertions ---
 
@@ -74,7 +75,7 @@ def all_categories_page(context):
 @step("No results error message displayed")
 def no_results_error(context):
     try:
-        context.browser\
+        context.browser \
             .find_element_by_xpath("//h3[@class='srp-save-null-search__heading']/text()='No exact matches found'")
     except NoSuchElementException:
         raise ValueError("\"No exact matches found\" error message has not been displayed ")
@@ -190,7 +191,7 @@ def _get_items_data(context):
 @step('Click on "{link_name}" link on the header navigation')
 def click_header_link(context, link_name):
     try:
-        context.browser\
+        context.browser \
             .find_elements_by_xpath(f"//*[@class = contains(@class,'gh-') and contains(text(), '{link_name}')]")
     except NoSuchElementException:
         raise ValueError(f"{link_name} link does not exist")
@@ -208,7 +209,7 @@ def is_page(context, title):
 def wait_autocomplete_flyout(context):
     WebDriverWait(context.browser, 20) \
         .until(EC.visibility_of_element_located((By.XPATH, "//li[contains(@class, 'ui-menu-item')]")),
-           message='Autocomplete search menu is not displayed')
+               message='Autocomplete search menu is not displayed')
 
 
 @step('All items are in autocomplete search somewhat "{search}" related')
@@ -220,6 +221,23 @@ def all_autocomplete_contain_search(context, search):
     for item in menu_items:
         if search.lower() not in item.text.lower():
             raise ValueError(f"Search word {search} is not present in \"{item.text}\" option autocomplete menu")
+
+# TO DO
+@step("Click on search item from autocomplete menu")
+def step_impl(context):
+    wait_autocomplete_flyout(context)
+
+    menu_items = context.browser.find_elements_by_xpath("//ul[@id='ui-id-1']//li[@class='ui-menu-item ghAC_visible']")
+    target_element = context.browser \
+        .find_elements_by_xpath("//ul[@id='ui-id-1']//li[@class='ui-menu-item ghAC_visible'][1]")
+
+    if not target_element:
+        raise ValueError(f"First result in autocomplete menu does not contain search")
+
+    ActionChains(context.browser) \
+        .move_to_element(target_element) \
+        .perform() \
+        .click()
 
 
 # --- Helpers ---

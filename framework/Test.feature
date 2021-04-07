@@ -78,10 +78,10 @@ Feature: Ebay Search
     When  Search for "dress"
     Then  All items are in autocomplete search somewhat "dress" related
 
-  Scenario: Verify that it is able to search from autocomplete menu using click
-    When  Search for "dress"
-    And   Click on search item from autocomplete menu
-    Then  All items are somewhat "dress" related
+#  Scenario: Verify that it is able to search from autocomplete menu using click
+#    When  Search for "dress"
+#    And   Click on search item from autocomplete menu
+#    Then  All items are somewhat "dress" related
 
   Scenario: Verify that it is able to search from autocomplete menu using keyboard
   Scenario: Verify that autocomplete menu displays last search results when search field is empty
